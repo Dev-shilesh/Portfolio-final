@@ -48,7 +48,6 @@ const CountUp: React.FC<CountUpProps> = ({ start = 0, end, duration, delay = 0 }
 
 
 export const Hero: React.FC = () => {
-  const [imgError, setImgError] = useState(false);
   const { ref, inView } = useInView({ triggerOnce: true });
 
   const handleHireMeClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -196,81 +195,268 @@ export const Hero: React.FC = () => {
 
         {/* Right Column - Visual Mockup */}
         <div className="lg:col-span-5 flex justify-center items-center relative">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="relative w-72 h-72 sm:w-80 sm:h-80 md:w-96 md:h-96 rounded-2xl p-1.5 bg-gradient-to-tr from-[#7c3aed] to-[#06b6d4] shadow-[0_0_40px_rgba(124,58,237,0.25)]"
-          >
+          <style>{`
+            @import url('https://fonts.googleapis.com/css2?family=DM+Mono&display=swap');
+
+            @property --angle {
+              syntax: '<angle>';
+              initial-value: 0deg;
+              inherits: false;
+            }
+
+            @keyframes spinAngle {
+              to {
+                --angle: 360deg;
+              }
+            }
+
+            @keyframes avatarPulse {
+              from {
+                transform: scale(1);
+              }
+              to {
+                transform: scale(1.04);
+              }
+            }
+
+            @keyframes availablePulse {
+              0% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+              }
+              70% {
+                box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+              }
+              100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+              }
+            }
+
+            @keyframes floatA {
+              from {
+                transform: translateY(0);
+              }
+              to {
+                transform: translateY(-10px);
+              }
+            }
+
+            @keyframes floatB {
+              from {
+                transform: translateY(0);
+              }
+              to {
+                transform: translateY(-10px);
+              }
+            }
+
+            @keyframes floatC {
+              from {
+                transform: translateY(0);
+              }
+              to {
+                transform: translateY(-10px);
+              }
+            }
+
+            @keyframes cardEntry {
+              from {
+                opacity: 0;
+                transform: translateY(30px);
+              }
+              to {
+                opacity: 1;
+                transform: translateY(0);
+              }
+            }
+
+            .profile-card-wrapper {
+              position: relative;
+              width: 300px;
+              height: 380px;
+              border-radius: 20px;
+              padding: 2px;
+              background: conic-gradient(from var(--angle), #7c3aed, #06b6d4, #7c3aed);
+              animation: spinAngle 4s linear infinite, cardEntry 0.9s ease-out 0.3s forwards;
+              box-shadow: 0 0 40px rgba(124, 58, 237, 0.3), 0 0 80px rgba(6, 182, 212, 0.15);
+              transition: transform 0.3s ease, box-shadow 0.3s ease;
+              overflow: visible;
+              opacity: 0;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+
+            .profile-card-wrapper:hover {
+              transform: translateY(-6px);
+              box-shadow: 0 0 50px rgba(124, 58, 237, 0.45), 0 0 100px rgba(6, 182, 212, 0.25);
+            }
+
+            .profile-card-inner {
+              position: relative;
+              width: 100%;
+              height: 100%;
+              border-radius: 18px;
+              background: #0d0d1a;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              padding: 40px 30px;
+              text-align: center;
+            }
+
+            .profile-avatar {
+              width: 110px;
+              height: 110px;
+              border-radius: 50%;
+              background: linear-gradient(135deg, #60a5fa, #818cf8, #a78bfa);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              box-shadow: 0 0 30px rgba(139, 92, 246, 0.6);
+              animation: avatarPulse 3s ease-in-out infinite alternate;
+            }
+
+            .profile-avatar span {
+              color: white;
+              font-size: 2rem;
+              font-weight: 800;
+              letter-spacing: 2px;
+              font-family: 'Syne', sans-serif;
+            }
+
+            .profile-name {
+              color: white;
+              font-size: 1.5rem;
+              font-weight: 700;
+              margin-top: 20px;
+              font-family: 'Syne', sans-serif;
+            }
+
+            .profile-subtitle {
+              color: #818cf8;
+              font-size: 0.75rem;
+              letter-spacing: 3px;
+              font-weight: 500;
+              font-family: 'DM Mono', monospace;
+              margin-top: 6px;
+              margin-bottom: 20px;
+            }
+
+            .profile-badge {
+              display: inline-flex;
+              align-items: center;
+              gap: 8px;
+              background: #064e3b;
+              padding: 6px 16px;
+              border-radius: 999px;
+              color: #10b981;
+              font-size: 0.85rem;
+              font-weight: 600;
+            }
+
+            .profile-badge-dot {
+              width: 8px;
+              height: 8px;
+              background: #10b981;
+              border-radius: 50%;
+              animation: availablePulse 1.5s infinite;
+            }
+
+            .floating-badge {
+              position: absolute;
+              background: #13131f;
+              border: 1px solid rgba(255, 255, 255, 0.1);
+              border-radius: 999px;
+              padding: 8px 16px;
+              font-size: 0.8rem;
+              color: #e2e8f0;
+              white-space: nowrap;
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              z-index: 10;
+            }
+
+            .badge-azure {
+              top: -18px;
+              left: -30px;
+              animation: floatA 3s ease-in-out infinite alternate;
+            }
+
+            .badge-react {
+              top: -18px;
+              right: -30px;
+              animation: floatB 3s ease-in-out infinite alternate;
+              animation-delay: 1s;
+            }
+
+            .badge-langchain {
+              bottom: 60px;
+              left: -40px;
+              animation: floatC 3s ease-in-out infinite alternate;
+              animation-delay: 2s;
+            }
+          `}</style>
+
+          <div className="profile-card-wrapper">
             {/* Inner Content Box */}
-            <div className="w-full h-full rounded-[14px] bg-[#0e0e1c] overflow-hidden flex items-center justify-center relative group">
-              {/* Actual photo, if not loaded/configured show premium placeholder */}
-              {!imgError ? (
-                <img
-                  src="/images/profile.jpg"
-                  alt="Shilesh Mavchi"
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  onError={() => setImgError(true)}
-                />
-              ) : (
-                <div className="flex flex-col items-center justify-center gap-4 text-center p-6 w-full h-full bg-gradient-to-b from-[#0e0e1c] to-[#06060f]">
-                  <span className="font-syne font-extrabold text-6xl text-slate-600 tracking-wider">
-                    SM
-                  </span>
-                  <div className="font-mono text-xs text-slate-500 py-1 px-3 border border-slate-700 rounded-full">
-                    Full Stack & AI Developer
-                  </div>
-                </div>
-              )}
-              {/* Hover Overlay */}
-              <div className="absolute inset-0 bg-[#06060f]/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+            <div className="profile-card-inner">
+              {/* Circular Logo Profile */}
+              <div className="profile-avatar">
+                <span>SM</span>
+              </div>
+
+              {/* Name */}
+              <h2 className="profile-name">
+                Shilesh Mavchi
+              </h2>
+
+              {/* Subtitle */}
+              <p className="profile-subtitle">
+                FULL STACK &bull; AI/ML
+              </p>
+
+              {/* Available Badge */}
+              <div className="profile-badge">
+                <span className="profile-badge-dot" />
+                Available
+              </div>
             </div>
 
             {/* Floating Badge Chip 1 (Top-Right) */}
-            <motion.div
-              animate={{ y: [0, -8, 0] }}
-              transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
-              className="absolute -top-6 -right-6 px-4 py-2 rounded-xl glass-card text-xs font-semibold text-white flex items-center gap-1.5 shadow-lg border border-[#7c3aed]/30 hover:border-[#7c3aed] transition-colors"
-            >
+            <div className="floating-badge badge-react">
               <span>⚡</span> React & Next.js
-            </motion.div>
+            </div>
 
             {/* Floating Badge Chip 2 (Bottom-Left) */}
-            <motion.div
-              animate={{ y: [0, 8, 0] }}
-              transition={{ repeat: Infinity, duration: 4.5, ease: 'easeInOut' }}
-              className="absolute -bottom-6 -left-6 px-4 py-2 rounded-xl glass-card text-xs font-semibold text-white flex items-center gap-1.5 shadow-lg border border-[#06b6d4]/30 hover:border-[#06b6d4] transition-colors"
-            >
+            <div className="floating-badge badge-langchain">
               <span>🤖</span> LangChain & RAG
-            </motion.div>
+            </div>
 
             {/* Floating Badge Chip 3 (Top-Left) */}
-            <motion.div
-              animate={{ y: [-4, 4, -4] }}
-              transition={{ repeat: Infinity, duration: 3.5, ease: 'easeInOut' }}
-              className="absolute top-12 -left-12 px-4 py-2 rounded-xl glass-card text-xs font-semibold text-white flex items-center gap-1.5 shadow-lg border border-[#a855f7]/30 hover:border-[#a855f7] transition-colors"
-            >
+            <div className="floating-badge badge-azure">
               <span>☁️</span> Azure Certified
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Stats Bar (Full-Width Row Below Hero) */}
       <div
         ref={ref}
-        className="max-w-7xl w-full mx-auto mt-24 border-t border-[#7c3aed]/15 pt-12"
+        className="max-w-7xl w-full mx-auto mt-24 rounded-3xl border border-[#7c3aed]/25 bg-gradient-to-r from-[#181335]/50 via-[#251C5C]/65 to-[#181335]/50 backdrop-blur-xl p-8 sm:p-12 shadow-[0_0_50px_rgba(124,58,237,0.15)] transition-all duration-300"
       >
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 justify-items-center">
           {[
-            { label: 'Years of Experience', value: 3, suffix: '+' },
-            { label: 'Projects Shipped', value: 6, suffix: '+' },
+            { label: 'Years of Experience', value: 6, suffix: '+' },
+            { label: 'Projects Shipped', value: 20, suffix: '+' },
             { label: 'Technologies', value: 20, suffix: '+' },
             { label: 'Certifications', value: 4, suffix: '' },
           ].map((stat, idx) => (
             <div
               key={idx}
-              className="flex flex-col items-center text-center gap-1.5 md:border-r last:border-0 border-[#7c3aed]/15 w-full last-of-type:border-r-0"
+              className="flex flex-col items-center text-center gap-1.5 md:border-r last:border-0 border-[#7c3aed]/20 w-full last-of-type:border-r-0"
             >
               <span className="font-syne font-extrabold text-4xl sm:text-5xl text-white tracking-tight flex items-baseline justify-center">
                 {inView ? (
@@ -285,7 +471,7 @@ export const Hero: React.FC = () => {
                 )}
                 <span className="text-[#a855f7] font-semibold">{stat.suffix}</span>
               </span>
-              <span className="font-body text-xs md:text-sm text-slate-400 tracking-wide uppercase mt-1">
+              <span className="font-body text-xs md:text-sm text-slate-300 tracking-wide uppercase mt-1">
                 {stat.label}
               </span>
             </div>

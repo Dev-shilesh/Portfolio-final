@@ -7,7 +7,7 @@ import { Services } from './sections/Services';
 import { Works } from './sections/Works';
 import { Timeline } from './sections/Timeline';
 import { Skills } from './sections/Skills';
-import { Testimonials } from './sections/Testimonials';
+// import { Testimonials } from './sections/Testimonials';
 import { Contact } from './sections/Contact';
 
 function App() {
@@ -62,8 +62,8 @@ function App() {
         {/* Skills Section */}
         <Skills />
 
-        {/* Testimonials Carousel Section */}
-        <Testimonials />
+        {/* Testimonials Carousel Section - Hidden for now */}
+        {/* <Testimonials /> */}
 
         {/* Contact Form & Info Section */}
         <Contact />
